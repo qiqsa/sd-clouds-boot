@@ -28,19 +28,14 @@ public class UserEndpoint {
         Page<User> page = this.service.getPage(pageable);
         if (null != page) {
             //转换为Dto对象
-/*            return page.getContent().stream().map((user) -> {
-                return new UserDto();
-            }).collect(Collectors.toList());*/
-            List<UserDto> dtos = new ArrayList<>();
-            for (User user : page) {
-                dtos.add(new UserDto(user));
-            }
-            return dtos;
+            return page.getContent().stream().map(user -> {
+                return new UserDto(user);
+            }).collect(Collectors.toList());
         }
         return Collections.EMPTY_LIST;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(name = "/detailUser", value = "/{id}", method = RequestMethod.GET)
     public UserDto detailUser(@PathVariable Long id) {
         User user = this.service.load(id);
         return (null != user) ? new UserDto(user) : null;
